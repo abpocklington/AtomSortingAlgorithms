@@ -14,7 +14,7 @@ ArrayDim = 10
 TargetDim = 'max'
 trials = 1
 LoadProbability = .6
-algorithm = 1
+algorithm = 2
 RecordData = False
 MakeAnimation = True
 
@@ -56,7 +56,7 @@ while i < trials:
         placeholder = Hungarian.Hungarian(Array,ArrayDim,TargetDim)
     if algorithm == 3:
         placeholder = Snake.snake(Array,ArrayDim,TargetDim)
-    
+       
     time.append(placeholder[0].microseconds + placeholder[0].seconds*(10**6))
     moves.append(placeholder[1])
     fidelity.append(placeholder[2])
@@ -90,6 +90,3 @@ if RecordData == True:
 if MakeAnimation == True:
     moves = moves[0]
     Animator(StaticArray,moves,ArrayDim)
-
-
-
