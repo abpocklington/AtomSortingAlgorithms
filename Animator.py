@@ -1,23 +1,18 @@
 import BalanceCompressAlgorithm
-import CompressRow
-import Transpose
 import matplotlib.pyplot as plt
 from matplotlib import animation
 import MakeBoolArray
-import Move
 
 def Animator(Array,moves,dim):
     StaticArray = Array
     ArrayDim = dim
     def MakeMove(Array,move):
-        print move
         COM = BalanceCompressAlgorithm.CenterOfMass(StaticArray, ArrayDim)
         dim = len(Array)
-        arrays = [Array]
         i = 0
         if 1 > 0:
             if len(move) == 2:
-                Array = Move.Move(Array,move[0],move[1])
+                Array = BalanceCompressAlgorithm.Move(Array,move[0],move[1])
             else:
                 if move[0] == 'r':
                     row = int(move[3])
@@ -25,21 +20,19 @@ def Animator(Array,moves,dim):
                     Array[int(move[3])] = BalanceCompressAlgorithm.CompressRow(COM[1],ArrayDim, RowTotals[int(move[3])])
                 if move[0] == 'c':
                     col = int(move[3])
-                    Array = Transpose.Transpose(Array,dim)
-                    Array = CompressRow.CompressRow(Array,col,COM)
-                    Array = Transpose.Transpose(Array,dim)
-            arrays.append(Array)
+                    Array = BalanceCompressAlgorithm.Transpose(Array,dim)
+                    Array = BalanceCompressAlgorithm.CompressRow(Array,col,COM)
+                    Array = BalanceCompressAlgorithm.Transpose(Array,dim)
             i += 1
-        return arrays
+        return Array
 
     def update(n):
-        if n > 0 and n<len(moves):
+        if n > 0 and n < len(moves):
             ax.cla()
-            print n
             plotArray(Array,n)
 
     def plotArray(Array,n):
-        MakeMove(Array,moves[n])
+        Array = MakeMove(Array,moves[n])
         i = 0
         j = 0
         x = []
@@ -47,12 +40,12 @@ def Animator(Array,moves,dim):
         while i<10:
             while j<10:
                 if Array[i][j] == True:
-                    x.append(i)
-                    y.append(j)
+                    x.append(j)
+                    y.append(i)
                 j += 1
             i += 1
             j = 0
-        ax.plot(y,x,'ro')
+        ax.plot(x,y,'ro')
         plt.grid(True)
         plt.autoscale(False)
         plt.ylim(-1,10)
@@ -62,5 +55,5 @@ def Animator(Array,moves,dim):
 
     fig = plt.figure(figsize=(10,10))
     ax = fig.add_subplot(1,1,1)
-    anim  = animation.FuncAnimation(fig, update,interval = 10)
+    anim  = animation.FuncAnimation(fig, update,interval = 100)
     plt.show()
